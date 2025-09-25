@@ -49,55 +49,55 @@ int EnemyBaseDamage = 0;
 int EnemyDamage = Random.Shared.Next(5, 10);
 int EnemyAction = 0;
 int DefeatedPokemonCount = 0;
-string EnemyPokermon = "";
 
-// Enemy Name picker
-int EnemyRandomizer = Random.Shared.Next(1, 10);
-if (EnemyRandomizer == 1)
+Enemy Bulbusur = new()
 {
-    EnemyPokermon = "Cardizard";
-}
-if (EnemyRandomizer == 2)
+    name = "Bulbusur"
+};
+Enemy Cardizard = new()
 {
-    EnemyPokermon = "Purple Rat";
-}
-if (EnemyRandomizer == 3)
+    name = "Cardizard"
+};
+Enemy Purple_Rat = new()
 {
-    EnemyPokermon = "Bubasaur";
-}
-if (EnemyRandomizer == 4)
+    name = "Purple Rat"
+};
+Enemy Raishoe = new()
 {
-    EnemyPokermon = "Raishoe";
-}
-if (EnemyRandomizer == 5)
+    name = "Raishoe"
+};
+Enemy Bugtrio = new()
 {
-    EnemyPokermon = "Bugtrio";
-}
-if (EnemyRandomizer == 6)
+    name = "Bugtrio"
+};
+Enemy Mr_clown = new()
 {
-    EnemyPokermon = "Mr.clown";
-}
-if (EnemyRandomizer == 7)
+    name = "Mr.clown"
+};
+Enemy Borelax = new()
 {
-    EnemyPokermon = "Borelax";
-}
-if (EnemyRandomizer == 8)
+    name = "Borelax"
+};
+Enemy Meetoo = new()
 {
-    EnemyPokermon = "Metoo";
-}
-if (EnemyRandomizer == 9)
+    name = "Metoo"
+};
+Enemy Unknown = new()
 {
-    EnemyPokermon = "Unknown";
-}
-if (EnemyRandomizer == 10)
+    name = "Unknown"
+};
+Enemy Whynot = new()
 {
-    EnemyPokermon = "Whynot";
-}
+    name = "Whynot"
+};
+
+List<Enemy> Enemies = [Bulbusur, Cardizard, Purple_Rat, Raishoe, Bugtrio, Mr_clown, Borelax, Meetoo, Unknown, Whynot];
+Enemy EnemyPokermon = Enemies[Random.Shared.Next(Enemies.Count)];
 
 //Introduction
 
 Thread.Sleep(1000);
-Console.WriteLine($"Your enemy is a {EnemyPokermon}");
+Console.WriteLine($"Your enemy is a {EnemyPokermon.name}");
 Thread.Sleep(1000);
 Console.WriteLine("To fight, press the number corresponding to the action you wish to take");
 Thread.Sleep(1000);
@@ -109,15 +109,16 @@ while (PokermonHealth >= 0)
         Console.WriteLine("Its your turn");
         Console.WriteLine("You have " + MP + " mana left");
         Console.WriteLine(ChosenPokermon + " has " + PokermonHealth + " hp left");
-        Console.WriteLine(EnemyPokermon + " has " + EnemyHealth + " hp left");
+        Console.WriteLine(EnemyPokermon.name + " has " + EnemyHealth + " hp left");
         Console.WriteLine("");
         Console.WriteLine("Which action do you wish to take?");
         Console.WriteLine("1.Attack, 2.Power attack (-20mp), 3.Heal 10-25hp (-20mp), 4.Regen mana (+20mp)");
         string Action = Console.ReadLine();
-        while (Action != "1" && Action != "2" && Action != "3" && Action != "4")
+        while (Action != "1" && Action != "2" && Action != "3" && Action != "4" && Action != "67")
         {
-            if (Action != "1" && Action != "2" && Action != "3" && Action != "4")
+            if (Action != "1" && Action != "2" && Action != "3" && Action != "4" && Action != "67")
                 Console.WriteLine("Invalid choice, Please try again");
+            Action = Console.ReadLine();
         }
         Thread.Sleep(1000);
         //========================================================================================================
@@ -137,7 +138,7 @@ while (PokermonHealth >= 0)
         // Power attack
         if (Action == "2" && MP >= 20)
         {
-            Console.WriteLine($"{ChosenPokermon} attacks {EnemyPokermon} for {10 + BaseDamage}");
+            Console.WriteLine($"{ChosenPokermon} attacks {EnemyPokermon.name} for {10 + BaseDamage}");
             EnemyHealth -= 10 + BaseDamage;
             MP -= 20;
         }
@@ -179,6 +180,10 @@ while (PokermonHealth >= 0)
                 MP = MaxMP;
             }
         }
+        if (Action == "67")
+        {
+            PokermonHealth = 0;
+        }
     }
     Thread.Sleep(1000);
 
@@ -191,7 +196,7 @@ while (PokermonHealth >= 0)
         {
             EnemyDamage = Random.Shared.Next(5, 10);
             EnemyDamage += EnemyBaseDamage;
-            Console.WriteLine($"{EnemyPokermon} attacks {ChosenPokermon} for {EnemyDamage}");
+            Console.WriteLine($"{EnemyPokermon.name} attacks {ChosenPokermon} for {EnemyDamage}");
             PokermonHealth -= EnemyDamage;
         }
         if (EnemyHealth <= EnemyHealth / 3)
@@ -203,13 +208,13 @@ while (PokermonHealth >= 0)
                 {
                     EnemyHealth = EnemyMaxHealth;
                 }
-                Console.WriteLine($"{EnemyPokermon} Heals to {EnemyHealth}hp");
+                Console.WriteLine($"{EnemyPokermon.name} Heals to {EnemyHealth}hp");
             }
             if (EnemyAction == 2 || EnemyAction == 3)
             {
                 EnemyDamage = Random.Shared.Next(5, 10);
                 EnemyDamage += EnemyBaseDamage;
-                Console.WriteLine($"{EnemyPokermon} attacks {ChosenPokermon} for {EnemyDamage}");
+                Console.WriteLine($"{EnemyPokermon.name} attacks {ChosenPokermon} for {EnemyDamage}");
                 PokermonHealth -= EnemyDamage;
             }
         }
@@ -217,56 +222,24 @@ while (PokermonHealth >= 0)
     Thread.Sleep(1000);
     if (PokermonHealth <= 0)
     {
-        Console.WriteLine($"You lost after defeating {DefeatedPokemonCount}");
+        Console.WriteLine($"You lost after defeating {DefeatedPokemonCount} pokermons");
+        Console.WriteLine(@"
+             _       __           _   
+            | |     / _|         | |  
+          __| | ___| |_ ___  __ _| |_ 
+         / _` |/ _ \  _/ _ \/ _` | __|
+        | (_| |  __/ ||  __/ (_| | |_ 
+        \__,_|\___|_| \___|\__,_|\__|
+        ");
     }
     if (EnemyHealth <= 0)
     {
         Console.WriteLine("");
         Console.WriteLine($"You defeated {EnemyPokermon}!");
         //Enemy Re-Randomizer
-        EnemyRandomizer = Random.Shared.Next(1, 10);
-        if (EnemyRandomizer == 1)
-        {
-            EnemyPokermon = "Cardizard";
-        }
-        if (EnemyRandomizer == 2)
-        {
-            EnemyPokermon = "Purple Rat";
-        }
-        if (EnemyRandomizer == 3)
-        {
-            EnemyPokermon = "Bubasaur";
-        }
-        if (EnemyRandomizer == 4)
-        {
-            EnemyPokermon = "Raishoe";
-        }
-        if (EnemyRandomizer == 5)
-        {
-            EnemyPokermon = "Bugtrio";
-        }
-        if (EnemyRandomizer == 6)
-        {
-            EnemyPokermon = "Mr.clown";
-        }
-        if (EnemyRandomizer == 7)
-        {
-            EnemyPokermon = "Borelax";
-        }
-        if (EnemyRandomizer == 8)
-        {
-            EnemyPokermon = "Metoo";
-        }
-        if (EnemyRandomizer == 9)
-        {
-            EnemyPokermon = "Unknown";
-        }
-        if (EnemyRandomizer == 10)
-        {
-            EnemyPokermon = "Whynot";
-        }
+        EnemyPokermon = Enemies[Random.Shared.Next(Enemies.Count)];
         Thread.Sleep(2000);
-        Console.WriteLine($"Your next enemy will be a {EnemyPokermon}");
+        Console.WriteLine($"Your next enemy will be a {EnemyPokermon.name}");
         //Choose upgrade
         Thread.Sleep(1000);
         Console.WriteLine("Which upgrade do you wish to pick?");
