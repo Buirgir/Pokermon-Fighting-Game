@@ -1,17 +1,34 @@
-﻿Console.WriteLine("Welcome to Pokermon!");
+﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.InteropServices;
+
+int MaxPokermonHealth = 100;
+int PokermonHealth = 100;
+int PokermonDamage = Random.Shared.Next(4, 7);
+int MaxMP = 100;
+int MP = 100;
+int EnemyMaxHealth = 50;
+int EnemyHealth = 50;
+int BaseDamage = 0;
+int EnemyBaseDamage = 0;
+int EnemyDamage = Random.Shared.Next(5, 10);
+int EnemyAction = 0;
+int DefeatedPokemonCount = 0;
+
+
+
+
+Console.WriteLine("Welcome to Pokermon!");
 Thread.Sleep(1000);
 Console.WriteLine("This is a very origional fighting game");
-Console.WriteLine("Input a username");
 Thread.Sleep(1000);
-string Username = Console.ReadLine();
-Thread.Sleep(1000);
+Console.WriteLine("Whats your name?");
+Console.ReadLine();
+Console.WriteLine("Enter the number corresponding to the action you wish to take");
 Console.WriteLine("Pick your starter pokermon");
 Console.WriteLine("1. Pikershoe");
 Console.WriteLine("2. Charrymander");
 Console.WriteLine("3. Quirtle");
-Console.WriteLine("Enter the number corresponding to the action you wish to take");
 string ChosenPokermon = Console.ReadLine();
-
 while (ChosenPokermon != "1" && ChosenPokermon != "2" && ChosenPokermon != "3")
 {
     ChosenPokermon = Console.ReadLine();
@@ -20,6 +37,27 @@ while (ChosenPokermon != "1" && ChosenPokermon != "2" && ChosenPokermon != "3")
         Console.WriteLine("Invalid choice, Please try again");
     }
 }
+Thread.Sleep(1000);
+Console.WriteLine("Do you wish to 1.Load a save 2.Continue");
+string Loadsave = Console.ReadLine();
+while (Loadsave != "1" && Loadsave != "2")
+{
+    Console.WriteLine("Invalid choice, please try again");
+    Loadsave = Console.ReadLine();
+}
+if (Loadsave == "1")
+{
+    if (File.Exists(@"save.txt") == false)
+    {
+        Console.WriteLine("There is nothing to load");
+    }
+    else
+    {
+        Load(MaxPokermonHealth, EnemyMaxHealth, PokermonHealth, EnemyHealth, BaseDamage, EnemyBaseDamage, MP, MaxMP, DefeatedPokemonCount, ChosenPokermon);
+    }
+}
+
+Thread.Sleep(1000);
 
 
 if (ChosenPokermon == "1")
@@ -37,18 +75,6 @@ if (ChosenPokermon == "3")
 //==========================================================================================================
 // First Fight
 //==========================================================================================================
-int MaxPokermonHealth = 100;
-int PokermonHealth = 100;
-int PokermonDamage = Random.Shared.Next(4, 7);
-int MaxMP = 100;
-int MP = 100;
-int EnemyMaxHealth = 50;
-int EnemyHealth = 50;
-int BaseDamage = 0;
-int EnemyBaseDamage = 0;
-int EnemyDamage = Random.Shared.Next(5, 10);
-int EnemyAction = 0;
-int DefeatedPokemonCount = 0;
 
 Enemy Bulbusur = new()
 {
@@ -114,9 +140,9 @@ while (PokermonHealth >= 0)
         Console.WriteLine("Which action do you wish to take?");
         Console.WriteLine("1.Attack, 2.Power attack (-20mp), 3.Heal 10-25hp (-20mp), 4.Regen mana (+20mp)");
         string Action = Console.ReadLine();
-        while (Action != "1" && Action != "2" && Action != "3" && Action != "4" && Action != "67")
+        while (Action != "1" && Action != "2" && Action != "3" && Action != "4" && Action != "67" && Action != "Die")
         {
-            if (Action != "1" && Action != "2" && Action != "3" && Action != "4" && Action != "67")
+            if (Action != "1" && Action != "2" && Action != "3" && Action != "4" && Action != "67" && Action != "Die")
                 Console.WriteLine("Invalid choice, Please try again");
             Action = Console.ReadLine();
         }
@@ -184,6 +210,10 @@ while (PokermonHealth >= 0)
         {
             PokermonHealth = 0;
         }
+        if (Action == "Die")
+        {
+            EnemyHealth -= 999999999;
+        }
     }
     Thread.Sleep(1000);
 
@@ -239,7 +269,6 @@ while (PokermonHealth >= 0)
         //Enemy Re-Randomizer
         EnemyPokermon = Enemies[Random.Shared.Next(Enemies.Count)];
         Thread.Sleep(2000);
-        Console.WriteLine($"Your next enemy will be a {EnemyPokermon.name}");
         //Choose upgrade
         Thread.Sleep(1000);
         Console.WriteLine("Which upgrade do you wish to pick?");
@@ -278,6 +307,22 @@ while (PokermonHealth >= 0)
         PokermonHealth = MaxPokermonHealth;
         MP = MaxMP;
         Thread.Sleep(1000);
+        Console.WriteLine("Do you wish to: 1.Save, 2.Continue");
+        string wannasave = Console.ReadLine();
+        while (wannasave != "1" && wannasave != "2")
+        {
+            Console.WriteLine("invalid choice, try again");
+            wannasave = Console.ReadLine();
+        }
+        if (wannasave == "1")
+        {
+            Save(MaxPokermonHealth, EnemyMaxHealth, PokermonHealth, EnemyHealth, BaseDamage, EnemyBaseDamage, MP, MaxMP, DefeatedPokemonCount, ChosenPokermon);
+            Console.WriteLine("You saved the game");
+            Console.WriteLine("the game will now close");
+            Thread.Sleep(2000);
+            System.Environment.Exit(0);
+        }
+        Console.WriteLine($"Your next enemy will be a {EnemyPokermon.name}");
         Console.WriteLine("");
         Console.WriteLine("LET THE BATTLE BEGIN!");
         Thread.Sleep(1000);
@@ -286,7 +331,36 @@ while (PokermonHealth >= 0)
 }
 
 
-
+static void Save(float MaxPokermonHealth, float EnemyMaxHealth, float PokermonHealth, float EnemyHealth, float BaseDamage, float EnemyBaseDamage, float MP, float MaxMP, float DefeatedPokemonCount, string ChosenPokermon)
+{
+    string[] SaveStats = { MaxPokermonHealth.ToString(), EnemyMaxHealth.ToString(), PokermonHealth.ToString(), EnemyHealth.ToString(), BaseDamage.ToString(), EnemyBaseDamage.ToString(), MP.ToString(), MaxMP.ToString(), DefeatedPokemonCount.ToString(), ChosenPokermon };
+    if (File.Exists(@"save.txt"))
+    {
+        File.WriteAllLines(@"save.txt", SaveStats);
+    }
+    else
+    {
+        var SaveFile = File.Create(@"save.txt");
+        SaveFile.Close();
+        File.WriteAllLines(@"save.txt", SaveStats);
+    }
+}
+static void Load(float MaxPokermonHealth, float EnemyMaxHealth, float PokermonHealth, float EnemyHealth, float BaseDamage, float EnemyBaseDamage, float MP, float MaxMP, float DefeatedPokemonCount, string ChosenPokermon)
+{
+    String[] Stats = File.ReadAllLines(@"save.txt");
+    string[] FloatStats = { Stats[0], Stats[1], Stats[2], Stats[3], Stats[4], Stats[5], Stats[6], Stats[7], Stats[8] };
+    float[] FloatArray = Array.ConvertAll(FloatStats, float.Parse);
+    MaxPokermonHealth = (FloatArray[0]);
+    EnemyMaxHealth = (FloatArray[1]);
+    PokermonHealth = (FloatArray[2]);
+    EnemyHealth = (FloatArray[3]);
+    BaseDamage = (FloatArray[4]);
+    EnemyBaseDamage = (FloatArray[5]);
+    MP = (FloatArray[6]);
+    MaxMP = (FloatArray[7]);
+    DefeatedPokemonCount = (FloatArray[8]);
+    ChosenPokermon = (Stats[9]);
+}
 
 
 
