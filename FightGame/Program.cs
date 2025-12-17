@@ -1,14 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Security;
 
 //PseudoKod
 //Jag planerar att skapa ett fighting spel som är lite som en parodi av pokemon. 
 //Jag vill att man ska ha flera moves och att spelet ska progressivt bli svårare.
 
-
-
-
-
+//Skapar ints
 int maxpokermonHealth = 100;
 int pokermonHealth = 100;
 int pokermonDamage = Random.Shared.Next(4, 7);
@@ -24,7 +23,7 @@ int defeatedPokemonCount = 0;
 
 
 
-
+// Introduktion
 Console.WriteLine("Welcome to Pokermon!");
 Thread.Sleep(1000);
 Console.WriteLine("This is a very origional fighting game");
@@ -36,14 +35,13 @@ Console.WriteLine("Pick your starter pokermon");
 Console.WriteLine("1. Pikershoe");
 Console.WriteLine("2. Charrymander");
 Console.WriteLine("3. Quirtle");
+
+//Naming system after player input
 string chosenPokermon = Console.ReadLine();
 while (chosenPokermon != "1" && chosenPokermon != "2" && chosenPokermon != "3")
 {
+    Console.WriteLine("Invalid choice, Please try again");
     chosenPokermon = Console.ReadLine();
-    if (chosenPokermon != "1" && chosenPokermon != "2" && chosenPokermon != "3")
-    {
-        Console.WriteLine("Invalid choice, Please try again");
-    }
 }
 Int32.TryParse(chosenPokermon, out int PokermonInt);
 PokermonInt --;
@@ -81,7 +79,7 @@ chosenPokermon = pokermonNames[PokermonInt];
 List<String> enemyNames = ["Bulbusur", "Cardizard", "Purple_Rat", "Raishoe", "Bugtrio", "Mr_clown", "Borelax", "Meetoo", "Unknown", "Whynot"];
 String enemyPokermon = enemyNames[Random.Shared.Next(enemyNames.Count)];
 
-//Introduction
+//Loop start and stats
 
 Thread.Sleep(1000);
 Console.WriteLine($"Your enemy is a {enemyPokermon}");
@@ -103,8 +101,7 @@ while (pokermonHealth >= 0)
         string action = Console.ReadLine();
         while (action != "1" && action != "2" && action != "3" && action != "4" && action != "67" && action != "Die")
         {
-            if (action != "1" && action != "2" && action != "3" && action != "4" && action != "67" && action != "Die")
-                Console.WriteLine("Invalid choice, Please try again");
+            Console.WriteLine("Invalid choice, Please try again");
             action = Console.ReadLine();
         }
         Thread.Sleep(1000);
@@ -129,7 +126,7 @@ while (pokermonHealth >= 0)
             enemyHealth -= 10 + baseDamage;
             MP -= 20;
         }
-        if (action == "2" && MP == MP - 20)
+        else if (action == "2" && MP == MP - 20)
         {
             Console.WriteLine("You could not afford to power attack and instead regenerate mana");
             MP += 20;
@@ -139,7 +136,7 @@ while (pokermonHealth >= 0)
             }
         }
         //Heal
-        if (action == "3" && MP >= 15)
+        else if (action == "3" && MP >= 15)
         {
             pokermonHealth += Random.Shared.Next(10, 25);
             if (pokermonHealth >= maxpokermonHealth)
@@ -148,7 +145,7 @@ while (pokermonHealth >= 0)
             }
             Console.WriteLine($"You heal {chosenPokermon} to {pokermonHealth}hp");
         }
-        if (action == "3" && MP <= 15)
+        else if (action == "3" && MP <= 15)
         {
             Console.WriteLine("You could not afford to heal and instead regenerate mana");
             MP += 20;
@@ -158,20 +155,20 @@ while (pokermonHealth >= 0)
             }
         }
         //Mana Regen
-        if (action == "4")
+        else if (action == "4")
         {
             Console.WriteLine("You regenerate mana");
             MP += 20;
-            if (MP >= maxMP)
+            if (MP > maxMP)
             {
                 MP = maxMP;
             }
         }
-        if (action == "67")
+        else if (action == "67")
         {
             pokermonHealth = 0;
         }
-        if (action == "Die")
+        else if (action == "Die")
         {
             enemyHealth -= 999999999;
         }
@@ -223,6 +220,12 @@ while (pokermonHealth >= 0)
         | (_| |  __/ ||  __/ (_| | |_ 
         \__,_|\___|_| \___|\__,_|\__|
         ");
+        if (File.Exists(@"save.txt"))
+        {
+            File.Delete(@"save.txt");
+        }
+        Console.ReadLine();
+        System.Environment.Exit(0);
     }
     if (enemyHealth <= 0)
     {
@@ -269,7 +272,7 @@ while (pokermonHealth >= 0)
         pokermonHealth = maxpokermonHealth;
         MP = maxMP;
         Thread.Sleep(1000);
-        Console.WriteLine("Do you wish to: 1.Save, 2.Continue");
+        Console.WriteLine("Do you wish to: 1.Save, 2.Continue without saving");
         string wannasave = Console.ReadLine();
         while (wannasave != "1" && wannasave != "2")
         {
@@ -280,9 +283,6 @@ while (pokermonHealth >= 0)
         {
             Save(maxpokermonHealth, enemyMaxHealth, pokermonHealth, enemyHealth, baseDamage, enemyBaseDamage, MP, maxMP, defeatedPokemonCount, chosenPokermon);
             Console.WriteLine("You saved the game");
-            Console.WriteLine("the game will now close");
-            Thread.Sleep(2000);
-            System.Environment.Exit(0);
         }
         Console.WriteLine($"Your next enemy will be a {enemyPokermon}");
         Console.WriteLine("");
