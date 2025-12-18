@@ -84,7 +84,7 @@ int enemy = Random.Shared.Next(enemyNames.Count);
 String enemyPokermon = enemyNames[enemy];
 string enemyType = enemyTypes[enemy];
 List<string> elements = ["Fire", "Water", "Light", "Dark", "Electric"];
-string Counter = WhatIsEffectiveAgainst(enemyType, elements);
+string counter = WhatIsEffectiveAgainst(enemyType, elements);
 
 //Loop start and stats
 
@@ -126,16 +126,16 @@ while (pokermonHealth >= 0)
                 Console.WriteLine($"{i + 1}. {elements[i]}");
             }
             action = Console.ReadLine();
-            int actionint = 0;
-            while(int.TryParse(action, out actionint) == false || actionint > elements.Count || actionint < 1)
+            int actionInt = 0;
+            while(int.TryParse(action, out actionInt) == false || actionInt > elements.Count || actionInt < 1)
             {
                 Console.WriteLine("Invalid choice, please try again");
                 action = Console.ReadLine();
             }
-            actionint --;
+            actionInt --;
             pokermonDamage = Random.Shared.Next(4, 7);
             pokermonDamage += baseDamage;
-            if(elements[actionint] == Counter)
+            if(elements[actionInt] == counter)
             {
                 pokermonDamage += 5;
                 Console.WriteLine("Your attack was super effective!");
@@ -192,7 +192,7 @@ while (pokermonHealth >= 0)
         }
         else if (action == "5")
         {
-            Console.WriteLine($"{Counter} is effective against {enemyPokermon}");
+            Console.WriteLine($"{counter} is effective against {enemyPokermon}");
             Thread.Sleep(1000);
         }
         else if (action == "67")
@@ -357,26 +357,26 @@ static void Load(float maxpokermonHealth, float enemyMaxHealth, float pokermonHe
 static string WhatIsEffectiveAgainst(String enemyType, List<string> elements)
 {
     
-    string Counter = "None";
+    string counter = "None";
     if(enemyType == "Grass")
     {
-        Counter = elements[0];
+        counter = elements[0];
     }
     else if(enemyType == "Fire")
     {
-        Counter = elements[1];
+        counter = elements[1];
     }
     else if(enemyType == "Dark")
     {
-        Counter = elements[2];
+        counter = elements[2];
     }
     else if(enemyType == "Electric")
     {
-        Counter = elements[3];
+        counter = elements[3];
     }
     else if(enemyType == "Water")
     {
-        Counter = elements[4];
+        counter = elements[4];
     }
-    return Counter;
+    return counter;
 }
