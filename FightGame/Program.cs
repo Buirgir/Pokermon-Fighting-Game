@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Metrics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security;
+using System.Xml.Serialization;
 
 //PseudoKod
 //Jag planerar att skapa ett fighting spel som är lite som en parodi av pokemon. 
@@ -18,7 +20,7 @@ int enemyHealth = 50;
 int baseDamage = 0;
 int enemyBaseDamage = 0;
 int enemyDamage = Random.Shared.Next(5, 10);
-int enemyaction = 0;
+int enemyAction = 0;
 int defeatedPokemonCount = 0;
 
 
@@ -68,7 +70,7 @@ if (loadSave == "1")
 }
 
 Thread.Sleep(1000);
-
+Console.Clear();
 List<string> pokermonNames = ["Pikershoe", "Charrymander", "Quirtle"];
 chosenPokermon = pokermonNames[PokermonInt];
 
@@ -77,12 +79,18 @@ chosenPokermon = pokermonNames[PokermonInt];
 //==========================================================================================================
 
 List<String> enemyNames = ["Bulbusur", "Cardizard", "Purple_Rat", "Raishoe", "Bugtrio", "Mr_clown", "Borelax", "Meetoo", "Unknown", "Whynot"];
-String enemyPokermon = enemyNames[Random.Shared.Next(enemyNames.Count)];
+List<String> enemyTypes = ["Grass", "Fire", "Dark", "Electric", "Grass", "Dark", "Water", "Dark", "Dark", "Electric"];
+int enemy = Random.Shared.Next(enemyNames.Count);
+String enemyPokermon = enemyNames[enemy];
+string enemyType = enemyTypes[enemy];
+List<string> elements = ["Fire", "Water", "Light", "Dark", "Electric"];
+string Counter = WhatIsEffectiveAgainst(enemyType, elements);
 
 //Loop start and stats
 
 Thread.Sleep(1000);
 Console.WriteLine($"Your enemy is a {enemyPokermon}");
+Console.WriteLine($"Its type is {enemyType}");
 Thread.Sleep(1000);
 Console.WriteLine("To fight, press the number corresponding to the action you wish to take");
 Thread.Sleep(1000);
@@ -97,9 +105,9 @@ while (pokermonHealth >= 0)
         Console.WriteLine(enemyPokermon + " has " + enemyHealth + " hp left");
         Console.WriteLine("");
         Console.WriteLine("Which action do you wish to take?");
-        Console.WriteLine("1.Attack, 2.Power attack (-20mp), 3.Heal 10-25hp (-20mp), 4.Regen mana (+20mp)");
+        Console.WriteLine("1.Attack, 2.Power attack (-20mp), 3.Heal 10-25hp (-20mp), 4.Regen mana (+20mp), 5.Check counter");
         string action = Console.ReadLine();
-        while (action != "1" && action != "2" && action != "3" && action != "4" && action != "67" && action != "Die")
+        while (action != "1" && action != "2" && action != "3" && action != "4" && action != "67" && action != "Die" && action != "5")
         {
             Console.WriteLine("Invalid choice, Please try again");
             action = Console.ReadLine();
@@ -112,15 +120,33 @@ while (pokermonHealth >= 0)
         //Normal attack
         if (action == "1")
         {
+            Console.WriteLine("Which element would you like to use?");
+            for (int i = 0; i < elements.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {elements[i]}");
+            }
+            action = Console.ReadLine();
+            int actionint = 0;
+            while(int.TryParse(action, out actionint) == false || actionint > elements.Count || actionint < 1)
+            {
+                Console.WriteLine("Invalid choice, please try again");
+                action = Console.ReadLine();
+            }
+            actionint --;
             pokermonDamage = Random.Shared.Next(4, 7);
             pokermonDamage += baseDamage;
-            Console.WriteLine(chosenPokermon + " attacks for " + pokermonDamage + "hp");
+            if(elements[actionint] == Counter)
+            {
+                pokermonDamage += 5;
+                Console.WriteLine("Your attack was super effective!");
+            }
+            Console.WriteLine($"{chosenPokermon} attacks for {pokermonDamage} hp");
             enemyHealth = enemyHealth - pokermonDamage;
             Thread.Sleep(500);
             Console.WriteLine(enemyPokermon + " has " + enemyHealth + " hp left");
         }
         // Power attack
-        if (action == "2" && MP >= 20)
+        else if (action == "2" && MP >= 20)
         {
             Console.WriteLine($"{chosenPokermon} attacks {enemyPokermon} for {10 + baseDamage}");
             enemyHealth -= 10 + baseDamage;
@@ -164,6 +190,11 @@ while (pokermonHealth >= 0)
                 MP = maxMP;
             }
         }
+        else if (action == "5")
+        {
+            Console.WriteLine($"{Counter} is effective against {enemyPokermon}");
+            Thread.Sleep(1000);
+        }
         else if (action == "67")
         {
             pokermonHealth = 0;
@@ -179,7 +210,7 @@ while (pokermonHealth >= 0)
     if (enemyHealth >= 0)
     {
         Console.WriteLine("");
-        enemyaction = Random.Shared.Next(1, 3);
+        enemyAction = Random.Shared.Next(1, 3);
         if (enemyHealth >= enemyHealth / 3)
         {
             enemyDamage = Random.Shared.Next(5, 10);
@@ -189,7 +220,7 @@ while (pokermonHealth >= 0)
         }
         if (enemyHealth <= enemyHealth / 3)
         {
-            if (enemyaction == 1)
+            if (enemyAction == 1)
             {
                 enemyHealth += Random.Shared.Next(5, 15);
                 if (enemyHealth >= enemyMaxHealth)
@@ -198,7 +229,7 @@ while (pokermonHealth >= 0)
                 }
                 Console.WriteLine($"{enemyPokermon} Heals to {enemyHealth}hp");
             }
-            if (enemyaction == 2 || enemyaction == 3)
+            if (enemyAction > 1)
             {
                 enemyDamage = Random.Shared.Next(5, 10);
                 enemyDamage += enemyBaseDamage;
@@ -322,4 +353,30 @@ static void Load(float maxpokermonHealth, float enemyMaxHealth, float pokermonHe
     maxMP = (FloatArray[7]);
     defeatedPokemonCount = (FloatArray[8]);
     chosenPokermon = (Stats[9]);
+}
+static string WhatIsEffectiveAgainst(String enemyType, List<string> elements)
+{
+    
+    string Counter = "None";
+    if(enemyType == "Grass")
+    {
+        Counter = elements[0];
+    }
+    else if(enemyType == "Fire")
+    {
+        Counter = elements[1];
+    }
+    else if(enemyType == "Dark")
+    {
+        Counter = elements[2];
+    }
+    else if(enemyType == "Electric")
+    {
+        Counter = elements[3];
+    }
+    else if(enemyType == "Water")
+    {
+        Counter = elements[4];
+    }
+    return Counter;
 }
