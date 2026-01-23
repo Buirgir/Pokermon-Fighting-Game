@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 //Jag vill att man ska ha flera moves och att spelet ska progressivt bli svårare.
 
 //Skapar ints
-int maxpokermonHealth = 100;
+int maxPokermonHealth = 100;
 int pokermonHealth = 100;
 int pokermonDamage = Random.Shared.Next(4, 7);
 int maxMP = 100;
@@ -26,6 +26,7 @@ int defeatedPokemonCount = 0;
 
 
 // Introduktion
+
 Console.WriteLine("Welcome to Pokermon!");
 Thread.Sleep(1000);
 Console.WriteLine("This is a very origional fighting game");
@@ -65,7 +66,16 @@ if (loadSave == "1")
     }
     else
     {
-        Load(maxpokermonHealth, enemyMaxHealth, pokermonHealth, enemyHealth, baseDamage, enemyBaseDamage, MP, maxMP, defeatedPokemonCount, chosenPokermon);
+        int[] intArray = Load(maxPokermonHealth, enemyMaxHealth, pokermonHealth, enemyHealth, baseDamage, enemyBaseDamage, MP, maxMP, defeatedPokemonCount);
+        maxPokermonHealth = intArray[0];
+        enemyMaxHealth = intArray[1];
+        pokermonHealth = intArray[2];
+        enemyHealth = intArray[3];
+        baseDamage = intArray[4];
+        enemyBaseDamage = intArray[5];
+        MP = intArray[6];
+        maxMP = intArray[7];
+        defeatedPokemonCount = intArray[8];
     }
 }
 
@@ -86,7 +96,7 @@ string enemyType = enemyTypes[enemy];
 List<string> elements = ["Fire", "Water", "Light", "Dark", "Electric"];
 string counter = WhatIsEffectiveAgainst(enemyType, elements);
 
-//Loop start and stats
+//Loop start andstats
 
 Thread.Sleep(1000);
 Console.WriteLine($"Your enemy is a {enemyPokermon}");
@@ -165,9 +175,9 @@ while (pokermonHealth >= 0)
         else if (action == "3" && MP >= 15)
         {
             pokermonHealth += Random.Shared.Next(10, 25);
-            if (pokermonHealth >= maxpokermonHealth)
+            if (pokermonHealth >= maxPokermonHealth)
             {
-                pokermonHealth = maxpokermonHealth;
+                pokermonHealth = maxPokermonHealth;
             }
             Console.WriteLine($"You heal {chosenPokermon} to {pokermonHealth}hp");
         }
@@ -269,7 +279,7 @@ while (pokermonHealth >= 0)
         Thread.Sleep(1000);
         Console.WriteLine("Which upgrade do you wish to pick?");
         Console.WriteLine("1.Max HP +20 - 40 2.Max damage + 2-4 3.Max MP + 20-40");
-        Console.WriteLine("(Your stats will be regenerated at the start of the next fight)");
+        Console.WriteLine("(Yourstatswill be regenerated at the start of the next fight)");
         string UpgradeChoice = Console.ReadLine();
         while (UpgradeChoice != "1" && UpgradeChoice != "2" && UpgradeChoice != "3")
         {
@@ -279,8 +289,8 @@ while (pokermonHealth >= 0)
         Thread.Sleep(1000);
         if (UpgradeChoice == "1")
         {
-            maxpokermonHealth += Random.Shared.Next(20, 40);
-            Console.WriteLine($"{chosenPokermon} Max HP was upgraded to {maxpokermonHealth}");
+            maxPokermonHealth += Random.Shared.Next(20, 40);
+            Console.WriteLine($"{chosenPokermon} Max HP was upgraded to {maxPokermonHealth}");
         }
         if (UpgradeChoice == "2")
         {
@@ -298,9 +308,9 @@ while (pokermonHealth >= 0)
         enemyMaxHealth += Random.Shared.Next(10, 20);
         enemyBaseDamage += Random.Shared.Next(1, 3);
 
-        //Restoring stats
+        //Restoringstats
         enemyHealth = enemyMaxHealth;
-        pokermonHealth = maxpokermonHealth;
+        pokermonHealth = maxPokermonHealth;
         MP = maxMP;
         Thread.Sleep(1000);
         Console.WriteLine("Do you wish to: 1.Save, 2.Continue without saving");
@@ -312,7 +322,7 @@ while (pokermonHealth >= 0)
         }
         if (wannasave == "1")
         {
-            Save(maxpokermonHealth, enemyMaxHealth, pokermonHealth, enemyHealth, baseDamage, enemyBaseDamage, MP, maxMP, defeatedPokemonCount, chosenPokermon);
+            Save(maxPokermonHealth, enemyMaxHealth, pokermonHealth, enemyHealth, baseDamage, enemyBaseDamage, MP, maxMP, defeatedPokemonCount);
             Console.WriteLine("You saved the game");
         }
         Console.WriteLine($"Your next enemy will be a {enemyPokermon}");
@@ -324,35 +334,26 @@ while (pokermonHealth >= 0)
 }
 
 
-static void Save(float maxpokermonHealth, float enemyMaxHealth, float pokermonHealth, float enemyHealth, float baseDamage, float enemyBaseDamage, float MP, float maxMP, float defeatedPokemonCount, string chosenPokermon)
+static void Save(int maxPokermonHealth, int enemyMaxHealth, int pokermonHealth, int enemyHealth, int baseDamage, int enemyBaseDamage, int MP, int maxMP, int defeatedPokemonCount)
 {
-    string[] SaveStats = { maxpokermonHealth.ToString(), enemyMaxHealth.ToString(), pokermonHealth.ToString(), enemyHealth.ToString(), baseDamage.ToString(), enemyBaseDamage.ToString(), MP.ToString(), maxMP.ToString(), defeatedPokemonCount.ToString(), chosenPokermon };
+    string[] saveStats= { maxPokermonHealth.ToString(), enemyMaxHealth.ToString(), pokermonHealth.ToString(), enemyHealth.ToString(), baseDamage.ToString(), enemyBaseDamage.ToString(), MP.ToString(), maxMP.ToString(), defeatedPokemonCount.ToString() };
     if (File.Exists(@"save.txt"))
     {
-        File.WriteAllLines(@"save.txt", SaveStats);
+        File.WriteAllLines(@"save.txt", saveStats);
     }
     else
     {
-        var SaveFile = File.Create(@"save.txt");
-        SaveFile.Close();
-        File.WriteAllLines(@"save.txt", SaveStats);
+        var saveFile = File.Create(@"save.txt");
+        saveFile.Close();
+        File.WriteAllLines(@"save.txt", saveStats);
     }
 }
-static void Load(float maxpokermonHealth, float enemyMaxHealth, float pokermonHealth, float enemyHealth, float baseDamage, float enemyBaseDamage, float MP, float maxMP, float defeatedPokemonCount, string chosenPokermon)
+static int[] Load(int maxPokermonHealth, int enemyMaxHealth, int pokermonHealth, int enemyHealth, int baseDamage, int enemyBaseDamage, int MP, int maxMP, int defeatedPokemonCount)
 {
-    String[] Stats = File.ReadAllLines(@"save.txt");
-    string[] FloatStats = { Stats[0], Stats[1], Stats[2], Stats[3], Stats[4], Stats[5], Stats[6], Stats[7], Stats[8] };
-    float[] FloatArray = Array.ConvertAll(FloatStats, float.Parse);
-    maxpokermonHealth = (FloatArray[0]);
-    enemyMaxHealth = (FloatArray[1]);
-    pokermonHealth = (FloatArray[2]);
-    enemyHealth = (FloatArray[3]);
-    baseDamage = (FloatArray[4]);
-    enemyBaseDamage = (FloatArray[5]);
-    MP = (FloatArray[6]);
-    maxMP = (FloatArray[7]);
-    defeatedPokemonCount = (FloatArray[8]);
-    chosenPokermon = (Stats[9]);
+    String[]stats= File.ReadAllLines(@"save.txt");
+    string[] intStats= {stats[0],stats[1],stats[2],stats[3],stats[4],stats[5],stats[6],stats[7],stats[8] };
+    int[] intArray = Array.ConvertAll(intStats, int.Parse);
+    return intArray;
 }
 static string WhatIsEffectiveAgainst(String enemyType, List<string> elements)
 {
