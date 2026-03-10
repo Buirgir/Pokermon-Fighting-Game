@@ -21,7 +21,7 @@ public class ToolBox
         int[] intArray = Array.ConvertAll(intStats, int.Parse);
         return intArray;
     }
-    public static string WhatIsEffectiveAgainst(String enemyType, List<string> elements)
+    public static string WhatIsEffectiveAgainst(String enemyType, string[] elements)
     {
         
         string counter = "None";
@@ -54,13 +54,50 @@ public class ToolBox
         bool sucess = int.TryParse(answer, out value);
         while (true)
         {
+            if(sucess == true && min <= value && max >= value) break;
             Console.WriteLine("Invalid choice, Please try again");
             answer = Console.ReadLine();
-            int.TryParse(answer, out value);
             sucess = int.TryParse(answer, out value);
-            if(sucess == true && min <= value && max >= value)
-            break;
         }
         return value;
+    }
+    public static void StartRound(int MP, string chosenPokermon, int pokermonHealth, string enemyPokermon, int enemyHealth)
+    {
+        Console.WriteLine("");
+        Console.WriteLine("Its your turn");
+        Console.WriteLine($"You have {MP} mana left");
+        Console.WriteLine($"{chosenPokermon} has {pokermonHealth} hp left");
+        Console.WriteLine($"{enemyPokermon} has {enemyHealth} hp left");
+        Console.WriteLine("");
+        Console.WriteLine(@"Which action do you wish to take?
+        1.Attack, 2.Power attack (-20mp), 3.Heal 10-25hp (-20mp), 4.Regen mana (+20mp), 5.Check counter");
+    }
+    public static string[] EnemyPokermonPickerAndElement()
+    {
+        string[] enemyNames = ["Bulbusur", "Cardizard", "Purple_Rat", "Raishoe", "Bugtrio", "Mr_clown", "Borelax", "Meetoo", "Unknown", "Whynot"];
+        int enemy = Random.Shared.Next(enemyNames.Length);
+        String enemyPokermon = enemyNames[enemy];
+        string[] enemyTypes = ["Grass", "Fire", "Dark", "Electric", "Grass", "Dark", "Water", "Dark", "Dark", "Electric"];
+        string enemyType = enemyTypes[enemy];
+        return [enemyPokermon, enemyType];
+    }
+    public static int[] UpgradeCheck(int upgradeChoice, int maxPokermonHealth, int baseDamage, int maxMP, string chosenPokermon)
+    {
+            if (upgradeChoice == 1)
+            {
+                maxPokermonHealth += Random.Shared.Next(20, 40);
+                Console.WriteLine($"{chosenPokermon} Max HP was upgraded to {maxPokermonHealth}");
+            }
+            if (upgradeChoice == 2)
+            {
+                baseDamage += Random.Shared.Next(2, 4);
+                Console.WriteLine($"{chosenPokermon} Bonus damage was upgraded to +{baseDamage}");
+            }
+            if (upgradeChoice == 3)
+            {
+                maxMP += Random.Shared.Next(20, 40);
+                Console.WriteLine($"{chosenPokermon} max MP was upgraded to {maxMP}");
+            }
+        return [maxPokermonHealth, baseDamage, maxMP];
     }
 }
