@@ -21,7 +21,7 @@ int baseDamage = 0;
 int enemyBaseDamage = 0;
 int enemyDamage = Random.Shared.Next(5, 10);
 int enemyAction = 0;
-int defeatedPokemonCount = 0;
+int defeatedPokermonCount = 0;
 
 
 
@@ -56,7 +56,7 @@ if (loadSave == 1)
     {
         //Loads saves
         //Explained in toolbox
-        List<int> intList = ToolBox.Load(maxPokermonHealth, enemyMaxHealth, pokermonHealth, enemyHealth, baseDamage, enemyBaseDamage, MP, maxMP, defeatedPokemonCount);
+        List<int> intList = ToolBox.Load(maxPokermonHealth, enemyMaxHealth, pokermonHealth, enemyHealth, baseDamage, enemyBaseDamage, MP, maxMP, defeatedPokermonCount);
         if(intList.Count != 9)
         {
             //Implements a system to check if the save has been tampered with in a fatal way, and if they have it deletes them so they dont mess with the game.
@@ -74,14 +74,15 @@ if (loadSave == 1)
             enemyBaseDamage = intList[5];
             MP = intList[6];
             maxMP = intList[7];
-            defeatedPokemonCount = intList[8];
+            defeatedPokermonCount = intList[8];
         }
     }
 }
 
 Thread.Sleep(1000);
 Console.Clear();
-//Chooses pokermon aswell as its elements
+//Chooses pokermon aswell as its elements¨
+//Array since its set length
 string[] pokermonNames = ["Pikershoe", "Charrymander", "Quirtle"];
 string chosenPokermon = pokermonNames[pokermonInt];
 //==========================================================================================================
@@ -159,6 +160,7 @@ while (pokermonHealth >= 0)
     Thread.Sleep(1000);
 
     //Enemy move
+    //Array since it always returns the same ammount of ints
     int[] healthChange = Actions.EnemyMove(enemyHealth, enemyAction, enemyDamage, enemyBaseDamage, enemyPokermon, chosenPokermon, pokermonHealth, enemyMaxHealth);
     pokermonHealth = healthChange[0];
     enemyHealth = healthChange[1];
@@ -167,7 +169,7 @@ while (pokermonHealth >= 0)
     //Changes behaviour based on current hp
     if (pokermonHealth <= 0)
     {
-        Console.WriteLine($"You lost after defeating {defeatedPokemonCount} pokermons");
+        Console.WriteLine($"You lost after defeating {defeatedPokermonCount} pokermons");
         Console.WriteLine(@"
              _       __           _   
             | |     / _|         | |  
@@ -178,6 +180,7 @@ while (pokermonHealth >= 0)
         ");
         if (File.Exists(@"save.txt"))
         {
+            Console.WriteLine("As a punnishment your save is now gone");
             File.Delete(@"save.txt");
         }
         Console.ReadLine();
@@ -219,7 +222,8 @@ while (pokermonHealth >= 0)
         int wannasave = ToolBox.CheckAnswer(1, 2);
         if (wannasave == 1)
         {
-            ToolBox.Save(maxPokermonHealth, enemyMaxHealth, pokermonHealth, enemyHealth, baseDamage, enemyBaseDamage, MP, maxMP, defeatedPokemonCount);
+            //Saves all stats
+            ToolBox.Save(maxPokermonHealth, enemyMaxHealth, pokermonHealth, enemyHealth, baseDamage, enemyBaseDamage, MP, maxMP, defeatedPokermonCount);
             Console.WriteLine("You saved the game");
         }
         Console.WriteLine($"Your next enemy will be a {enemyPokermon}");

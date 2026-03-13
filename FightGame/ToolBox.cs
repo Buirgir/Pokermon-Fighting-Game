@@ -2,25 +2,33 @@ public class ToolBox
 {
     public static void Save(int maxPokermonHealth, int enemyMaxHealth, int pokermonHealth, int enemyHealth, int baseDamage, int enemyBaseDamage, int MP, int maxMP, int defeatedPokemonCount)
     {
+        //Convers all ints to strings
         string[] saveStats= { maxPokermonHealth.ToString(), enemyMaxHealth.ToString(), pokermonHealth.ToString(), enemyHealth.ToString(), baseDamage.ToString(), enemyBaseDamage.ToString(), MP.ToString(), maxMP.ToString(), defeatedPokemonCount.ToString() };
+        //Cheks if the save.txt file already exists in the files
         if (File.Exists(@"save.txt"))
         {
+            //Writes everything into the txt on the correct lines
             File.WriteAllLines(@"save.txt", saveStats);
         }
         else
         {
+            //Creates save
             var saveFile = File.Create(@"save.txt");
             saveFile.Close();
+            //Once again, writes eveything to the txt
             File.WriteAllLines(@"save.txt", saveStats);
         }
     }
     public static List<int> Load(int maxPokermonHealth, int enemyMaxHealth, int pokermonHealth, int enemyHealth, int baseDamage, int enemyBaseDamage, int MP, int maxMP, int defeatedPokemonCount)
     {
+        //Reads lines of the save.txt into a array which will not be added to and therefore is a array and not a list
         String[]stats= File.ReadAllLines(@"save.txt");
+        //Array since it once again, will not change length
         string[] stringStats= {stats[0],stats[1],stats[2],stats[3],stats[4],stats[5],stats[6],stats[7],stats[8] };
         // int[] intArray = Array.ConvertAll(intStats, int.Parse);
         //List since it changes length
         List<int> intList = new List<int>();
+        //For loop to make sure that the save has not been edited in a game breaking way
         for (int i = 0; i < 9; i++)
         {
             bool sucess = int.TryParse(stringStats[i], out int b);
@@ -81,6 +89,7 @@ public class ToolBox
     }
     public static void StartRound(int MP, string chosenPokermon, int pokermonHealth, string enemyPokermon, int enemyHealth)
     {
+        //Stat breakdown before each round
         Console.WriteLine("");
         Console.WriteLine("Its your turn");
         Console.WriteLine($"You have {MP} mana left");
@@ -92,6 +101,7 @@ public class ToolBox
     }
     public static string[] EnemyPokermonPickerAndElement()
     {
+        //Randomizes pokemon and also assigns it the correct element
         string[] enemyNames = ["Bulbusur", "Cardizard", "Purple_Rat", "Raishoe", "Bugtrio", "Mr_clown", "Borelax", "Meetoo", "Unknown", "Whynot"];
         int enemy = Random.Shared.Next(enemyNames.Length);
         String enemyPokermon = enemyNames[enemy];
@@ -101,6 +111,7 @@ public class ToolBox
     }
     public static int[] UpgradeCheck(int upgradeChoice, int maxPokermonHealth, int baseDamage, int maxMP, string chosenPokermon)
     {
+        //Checks what stat the player wants to update and then updates it accordingly.
             if (upgradeChoice == 1)
             {
                 maxPokermonHealth += Random.Shared.Next(20, 40);
