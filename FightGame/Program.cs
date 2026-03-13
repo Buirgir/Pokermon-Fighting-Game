@@ -26,7 +26,6 @@ int defeatedPokemonCount = 0;
 
 
 // Introduktion
-
 Console.WriteLine(@"
 Welcome to Pokermon!
 This is a very origional fighting game
@@ -55,21 +54,34 @@ if (loadSave == 1)
     }
     else
     {
-        int[] intArray = ToolBox.Load(maxPokermonHealth, enemyMaxHealth, pokermonHealth, enemyHealth, baseDamage, enemyBaseDamage, MP, maxMP, defeatedPokemonCount);
-        maxPokermonHealth = intArray[0];
-        enemyMaxHealth = intArray[1];
-        pokermonHealth = intArray[2];
-        enemyHealth = intArray[3];
-        baseDamage = intArray[4];
-        enemyBaseDamage = intArray[5];
-        MP = intArray[6];
-        maxMP = intArray[7];
-        defeatedPokemonCount = intArray[8];
+        //Loads saves
+        //Explained in toolbox
+        List<int> intList = ToolBox.Load(maxPokermonHealth, enemyMaxHealth, pokermonHealth, enemyHealth, baseDamage, enemyBaseDamage, MP, maxMP, defeatedPokemonCount);
+        if(intList.Count != 9)
+        {
+            //Implements a system to check if the save has been tampered with in a fatal way, and if they have it deletes them so they dont mess with the game.
+            Console.WriteLine("Failed to load, Wiping save file");
+            Thread.Sleep(1000);
+            File.Delete(@"save.txt");
+        }
+        else
+        {
+            maxPokermonHealth = intList[0];
+            enemyMaxHealth = intList[1];
+            pokermonHealth = intList[2];
+            enemyHealth = intList[3];
+            baseDamage = intList[4];
+            enemyBaseDamage = intList[5];
+            MP = intList[6];
+            maxMP = intList[7];
+            defeatedPokemonCount = intList[8];
+        }
     }
 }
 
 Thread.Sleep(1000);
 Console.Clear();
+//Chooses pokermon aswell as its elements
 string[] pokermonNames = ["Pikershoe", "Charrymander", "Quirtle"];
 string chosenPokermon = pokermonNames[pokermonInt];
 //==========================================================================================================
@@ -83,12 +95,14 @@ string enemyType = enemyPokermonAndElement[1];
 string[] elements = ["Fire", "Water", "Light", "Dark", "Electric"];
 string counter = ToolBox.WhatIsEffectiveAgainst(enemyType, elements);
 
-//Loop start andstats
+//Loop start and stats display
 
 Thread.Sleep(1000);
 Console.WriteLine($@"Your enemy is a {enemyPokermon}
 Its type is {enemyType}");
 Thread.Sleep(1000);
+
+//lets you pick a action
 Console.WriteLine("To fight, press the number corresponding to the action you wish to take");
 Thread.Sleep(1000);
 while (pokermonHealth >= 0)
@@ -150,6 +164,7 @@ while (pokermonHealth >= 0)
     enemyHealth = healthChange[1];
     Thread.Sleep(1000);
     Console.Clear();
+    //Changes behaviour based on current hp
     if (pokermonHealth <= 0)
     {
         Console.WriteLine($"You lost after defeating {defeatedPokemonCount} pokermons");
@@ -168,6 +183,7 @@ while (pokermonHealth >= 0)
         Console.ReadLine();
         System.Environment.Exit(0);
     }
+    //Cheks if the enemy is dead
     if (enemyHealth <= 0)
     {
         Console.WriteLine("");

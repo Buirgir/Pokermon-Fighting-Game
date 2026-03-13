@@ -4,12 +4,15 @@ public class Actions
     {
     
         Console.WriteLine("Which element would you like to use?");
+        //choose element for attack
         for (int i = 0; i < elements.Length; i++)
         {
             Console.WriteLine($"{i + 1}. {elements[i]}");
         }
+        //check correct input
         int actionInt = ToolBox.CheckAnswer(1, elements.Length);
         actionInt --;
+        //attacks and does extra damage if you use the counter element
         pokermonDamage = Random.Shared.Next(4, 7);
         pokermonDamage += baseDamage;
         if(elements[actionInt] == counter)
@@ -17,6 +20,7 @@ public class Actions
             pokermonDamage += 5;
             Console.WriteLine("Your attack was super effective!");
         }
+        //tells player whats happening
         Console.WriteLine($"{chosenPokermon} attacks for {pokermonDamage} hp");
         enemyHealth = enemyHealth - pokermonDamage;
         Thread.Sleep(500);
@@ -63,10 +67,12 @@ public class Actions
                 Console.WriteLine($"{enemyPokermon} attacks {chosenPokermon} for {enemyDamage}");
                 pokermonHealth -= enemyDamage;
             }
+            //checks if enemy is low health and heals
             if (enemyHealth <= enemyHealth / 3)
             {
                 if (enemyAction == 1)
                 {
+                    //heals a random ammount
                     enemyHealth += Random.Shared.Next(5, 15);
                     if (enemyHealth >= enemyMaxHealth)
                     {

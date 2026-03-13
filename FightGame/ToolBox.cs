@@ -14,17 +14,31 @@ public class ToolBox
             File.WriteAllLines(@"save.txt", saveStats);
         }
     }
-    public static int[] Load(int maxPokermonHealth, int enemyMaxHealth, int pokermonHealth, int enemyHealth, int baseDamage, int enemyBaseDamage, int MP, int maxMP, int defeatedPokemonCount)
+    public static List<int> Load(int maxPokermonHealth, int enemyMaxHealth, int pokermonHealth, int enemyHealth, int baseDamage, int enemyBaseDamage, int MP, int maxMP, int defeatedPokemonCount)
     {
         String[]stats= File.ReadAllLines(@"save.txt");
-        string[] intStats= {stats[0],stats[1],stats[2],stats[3],stats[4],stats[5],stats[6],stats[7],stats[8] };
-        int[] intArray = Array.ConvertAll(intStats, int.Parse);
-        return intArray;
+        string[] stringStats= {stats[0],stats[1],stats[2],stats[3],stats[4],stats[5],stats[6],stats[7],stats[8] };
+        // int[] intArray = Array.ConvertAll(intStats, int.Parse);
+        //List since it changes length
+        List<int> intList = new List<int>();
+        for (int i = 0; i < 9; i++)
+        {
+            bool sucess = int.TryParse(stringStats[i], out int b);
+            if(sucess)
+            {
+                intList.Add(b);
+            }
+            else
+            {
+                break;
+            }
+        }
+        return intList;
     }
     public static string WhatIsEffectiveAgainst(String enemyType, string[] elements)
     {
-        
         string counter = "None";
+        //Simple if statements to just check what element should be the counter
         if(enemyType == "Grass")
         {
             counter = elements[0];
@@ -49,13 +63,17 @@ public class ToolBox
     }
     public static int CheckAnswer(int min, int max)
     {
+        //hell nah
         int value;
+        //gets first input
         string answer = Console.ReadLine();
+        //Cheks if entered value is a number
         bool sucess = int.TryParse(answer, out value);
         while (true)
         {
+            //Cheks that the answer is a int, and is less than maaximum aswell as more than min, and then breaks out of loop
             if(sucess == true && min <= value && max >= value) break;
-            Console.WriteLine("Invalid choice, Please try again");
+                Console.WriteLine("Invalid choice, Please try again");
             answer = Console.ReadLine();
             sucess = int.TryParse(answer, out value);
         }
