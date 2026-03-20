@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 //PseudoKod
 //Jag planerar att skapa ett fighting spel som är lite som en parodi av pokemon. 
 //Jag vill att man ska ha flera moves och att spelet ska progressivt bli svårare.
+
 //Skapar ints
 int maxPokermonHealth = 100;
 int pokermonHealth = 100;
@@ -99,7 +100,8 @@ string counter = ToolBox.WhatIsEffectiveAgainst(enemyType, elements);
 //Loop start and stats display
 
 Thread.Sleep(1000);
-Console.WriteLine($@"Your enemy is a {enemyPokermon}
+Console.WriteLine($@"
+Your enemy is a {enemyPokermon}
 Its type is {enemyType}");
 Thread.Sleep(1000);
 
@@ -155,6 +157,8 @@ while (pokermonHealth >= 0)
         else if (action == 5)
         {
             Console.WriteLine($"{counter} is effective against {enemyPokermon}");
+            Console.WriteLine("Press enter to continue");
+            Console.ReadLine();
         }
     }
     Thread.Sleep(1000);
@@ -171,12 +175,12 @@ while (pokermonHealth >= 0)
     {
         Console.WriteLine($"You lost after defeating {defeatedPokermonCount} pokermons");
         Console.WriteLine(@"
-             _       __           _   
-            | |     / _|         | |  
-          __| | ___| |_ ___  __ _| |_ 
-         / _` |/ _ \  _/ _ \/ _` | __|
-        | (_| |  __/ ||  __/ (_| | |_ 
-        \__,_|\___|_| \___|\__,_|\__|
+     _       __           _   
+    | |     / _|         | |  
+  __| | ___| |_ ___  __ _| |_ 
+ / _` |/ _ \  _/ _ \/ _` | __|
+| (_| |  __/ ||  __/ (_| | |_ 
+\__,_|\___|_| \___|\__,_|\__|
         ");
         if (File.Exists(@"save.txt"))
         {
@@ -218,13 +222,19 @@ while (pokermonHealth >= 0)
         pokermonHealth = maxPokermonHealth;
         MP = maxMP;
         Thread.Sleep(1000);
-        Console.WriteLine("Do you wish to: 1.Save, 2.Continue without saving");
+        Console.WriteLine("Do you wish to: 1.Save and continue, 2: save and quit");
         int wannasave = ToolBox.CheckAnswer(1, 2);
         if (wannasave == 1)
         {
             //Saves all stats
             ToolBox.Save(maxPokermonHealth, enemyMaxHealth, pokermonHealth, enemyHealth, baseDamage, enemyBaseDamage, MP, maxMP, defeatedPokermonCount);
             Console.WriteLine("You saved the game");
+        }
+        if(wannasave == 2)
+        {
+            ToolBox.Save(maxPokermonHealth, enemyMaxHealth, pokermonHealth, enemyHealth, baseDamage, enemyBaseDamage, MP, maxMP, defeatedPokermonCount);
+            Console.WriteLine("You saved the game");
+            System.Environment.Exit(0);
         }
         Console.WriteLine($"Your next enemy will be a {enemyPokermon}");
         Console.WriteLine("");
