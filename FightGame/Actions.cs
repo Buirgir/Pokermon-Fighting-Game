@@ -10,7 +10,7 @@ public class Actions
             Console.WriteLine($"{i + 1}. {elements[i]}");
         }
         //check correct input
-        int actionInt = ToolBox.CheckAnswer(1, elements.Length);
+        int actionInt = ToolBox.ReadKey(elements.Length);
         actionInt --;
         //attacks and does extra damage if you use the counter element
         pokermonDamage = Random.Shared.Next(4, 7);

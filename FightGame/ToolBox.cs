@@ -1,3 +1,6 @@
+using System.Numerics;
+using System.Security.Cryptography.X509Certificates;
+
 public class ToolBox
 {
     public static void Save(int maxPokermonHealth, int enemyMaxHealth, int pokermonHealth, int enemyHealth, int baseDamage, int enemyBaseDamage, int MP, int maxMP, int defeatedPokemonCount)
@@ -71,7 +74,7 @@ public class ToolBox
     }
     public static int CheckAnswer(int min, int max)
     {
-        //hell nah
+        //Old version of Readkey (redundant)
         int value;
         //gets first input
         string answer = Console.ReadLine();
@@ -97,7 +100,7 @@ public class ToolBox
         Console.WriteLine($"{enemyPokermon} has {enemyHealth} hp left");
         Console.WriteLine("");
         Console.WriteLine(@"Which action do you wish to take?
-        1.Attack, 2.Power attack (-20mp), 3.Heal 10-25hp (-20mp), 4.Regen mana (+20mp), 5.Check counter");
+1.Attack, 2.Power attack (-20mp), 3.Heal 10-25hp (-20mp), 4.Regen mana (+20mp), 5.Check counter");
     }
     public static string[] EnemyPokermonPickerAndElement()
     {
@@ -128,5 +131,20 @@ public class ToolBox
                 Console.WriteLine($"{chosenPokermon} max MP was upgraded to {maxMP}");
             }
         return [maxPokermonHealth, baseDamage, maxMP];
+    }
+    //Checks the key instead of the input
+    public static int ReadKey(int maxNumber)
+    {
+        ConsoleKeyInfo keyInfo;
+        //Loops untill correct key is pressed
+        while(true)
+        {
+            keyInfo = Console.ReadKey(true);
+            //Checks if correckt key is pressed and breaks if it is.
+            if (keyInfo.KeyChar >= '1' && keyInfo.KeyChar <= '0' + maxNumber)
+                break;
+        }
+        int.TryParse(keyInfo.KeyChar.ToString(), out int i);
+        return i;
     }
 }

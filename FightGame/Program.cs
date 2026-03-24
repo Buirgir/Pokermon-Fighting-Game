@@ -9,7 +9,6 @@ using System.Xml.Serialization;
 //PseudoKod
 //Jag planerar att skapa ett fighting spel som är lite som en parodi av pokemon. 
 //Jag vill att man ska ha flera moves och att spelet ska progressivt bli svårare.
-
 //Skapar ints
 int maxPokermonHealth = 100;
 int pokermonHealth = 100;
@@ -40,13 +39,13 @@ Pick your starter pokermon
 3. Quirtle");
 
 //Naming system after player input
-int pokermonInt = ToolBox.CheckAnswer(1, 3);
+int pokermonInt = ToolBox.ReadKey(3);
 pokermonInt --;
-Thread.Sleep(1000);
+Thread.Sleep(100);
 
 //Loading
 Console.WriteLine("Do you wish to 1.Load a save 2.Start a new save");
-int loadSave = ToolBox.CheckAnswer(1, 2);
+int loadSave = ToolBox.ReadKey(2);
 if (loadSave == 1)
 {
     if (File.Exists(@"save.txt") == false)
@@ -62,7 +61,7 @@ if (loadSave == 1)
         {
             //Implements a system to check if the save has been tampered with in a fatal way, and if they have it deletes them so they dont mess with the game.
             Console.WriteLine("Failed to load, Wiping save file");
-            Thread.Sleep(1000);
+            Thread.Sleep(100);
             File.Delete(@"save.txt");
         }
         else
@@ -80,7 +79,7 @@ if (loadSave == 1)
     }
 }
 
-Thread.Sleep(1000);
+Thread.Sleep(100);
 Console.Clear();
 //Chooses pokermon aswell as its elements¨
 //Array since its set length
@@ -99,22 +98,22 @@ string counter = ToolBox.WhatIsEffectiveAgainst(enemyType, elements);
 
 //Loop start and stats display
 
-Thread.Sleep(1000);
+Thread.Sleep(100);
 Console.WriteLine($@"
 Your enemy is a {enemyPokermon}
 Its type is {enemyType}");
-Thread.Sleep(1000);
+Thread.Sleep(100);
 
 //lets you pick a action
 Console.WriteLine("To fight, press the number corresponding to the action you wish to take");
-Thread.Sleep(1000);
+Thread.Sleep(100);
 while (pokermonHealth >= 0)
 {
     if (pokermonHealth >= 0)
     {
         ToolBox.StartRound(MP, chosenPokermon, pokermonHealth, enemyPokermon, enemyHealth);
-        int action = ToolBox.CheckAnswer(1, 5);
-        Thread.Sleep(1000);
+        int action = ToolBox.ReadKey(5);
+        Thread.Sleep(100);
         //========================================================================================================
         // Your Moves
         //========================================================================================================
@@ -161,14 +160,14 @@ while (pokermonHealth >= 0)
             Console.ReadLine();
         }
     }
-    Thread.Sleep(1000);
+    Thread.Sleep(300);
 
     //Enemy move
     //Array since it always returns the same ammount of ints
     int[] healthChange = Actions.EnemyMove(enemyHealth, enemyAction, enemyDamage, enemyBaseDamage, enemyPokermon, chosenPokermon, pokermonHealth, enemyMaxHealth);
     pokermonHealth = healthChange[0];
     enemyHealth = healthChange[1];
-    Thread.Sleep(1000);
+    Thread.Sleep(300);
     Console.Clear();
     //Changes behaviour based on current hp
     if (pokermonHealth <= 0)
@@ -184,8 +183,8 @@ while (pokermonHealth >= 0)
         ");
         if (File.Exists(@"save.txt"))
         {
-            Console.WriteLine("As a punnishment your save is now gone");
             File.Delete(@"save.txt");
+            Console.WriteLine("As a punnishment your save is now gone");
         }
         Console.ReadLine();
         System.Environment.Exit(0);
@@ -201,12 +200,12 @@ while (pokermonHealth >= 0)
         enemyType = enemyPokermonAndElement[1];
         Thread.Sleep(2000);
         //Choose upgrade
-        Thread.Sleep(1000);
+        Thread.Sleep(500);
         Console.WriteLine("Which upgrade do you wish to pick?");
         Console.WriteLine("1.Max HP +20 - 40 2.Max damage + 2-4 3.Max MP + 20-40");
         Console.WriteLine("(Yourstatswill be regenerated at the start of the next fight)");
-        int upgradeChoice = ToolBox.CheckAnswer(1, 3);
-        Thread.Sleep(1000);
+        int upgradeChoice = ToolBox.ReadKey(3);
+        Thread.Sleep(300);
         //explained at function
         int[] upgradeCheck = ToolBox.UpgradeCheck(upgradeChoice, maxPokermonHealth, baseDamage, maxMP, chosenPokermon);
         maxPokermonHealth = upgradeCheck[0];
@@ -221,9 +220,9 @@ while (pokermonHealth >= 0)
         enemyHealth = enemyMaxHealth;
         pokermonHealth = maxPokermonHealth;
         MP = maxMP;
-        Thread.Sleep(1000);
+        Thread.Sleep(100);
         Console.WriteLine("Do you wish to: 1.Save and continue, 2: save and quit");
-        int wannasave = ToolBox.CheckAnswer(1, 2);
+        int wannasave = ToolBox.ReadKey(2);
         if (wannasave == 1)
         {
             //Saves all stats
