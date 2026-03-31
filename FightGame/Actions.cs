@@ -1,8 +1,15 @@
 public class Actions
 {
-    public static int Attack(string[] elements, int pokermonDamage, int baseDamage, string counter , string chosenPokermon, int enemyHealth, string enemyPokermon)
+    public static int Attack(
+        string[] elements,
+        int pokermonDamage,
+        int baseDamage,
+        string counter,
+        string chosenPokermon,
+        int enemyHealth,
+        string enemyPokermon
+    )
     {
-    
         Console.WriteLine("Which element would you like to use?");
         //choose element for attack
         for (int i = 0; i < elements.Length; i++)
@@ -11,11 +18,11 @@ public class Actions
         }
         //check correct input
         int actionInt = ToolBox.ReadKey(elements.Length);
-        actionInt --;
+        actionInt--;
         //attacks and does extra damage if you use the counter element
         pokermonDamage = Random.Shared.Next(4, 7);
         pokermonDamage += baseDamage;
-        if(elements[actionInt] == counter)
+        if (elements[actionInt] == counter)
         {
             pokermonDamage += 5;
             Console.WriteLine("Your attack was super effective!");
@@ -27,13 +34,21 @@ public class Actions
         Console.WriteLine(enemyPokermon + " has " + enemyHealth + " hp left");
         return enemyHealth;
     }
-    public static int[] PwrAttack(string chosenPokermon, string enemyPokermon, int baseDamage, int enemyHealth, int MP)
+
+    public static int[] PwrAttack(
+        string chosenPokermon,
+        string enemyPokermon,
+        int baseDamage,
+        int enemyHealth,
+        int MP
+    )
     {
         Console.WriteLine($"{chosenPokermon} attacks {enemyPokermon} for {10 + baseDamage}");
         enemyHealth -= 10 + baseDamage;
         MP -= 20;
         return [enemyHealth, MP];
     }
+
     public static int Heal(int pokermonHealth, int maxPokermonHealth, string chosenPokermon)
     {
         pokermonHealth += Random.Shared.Next(10, 25);
@@ -44,6 +59,7 @@ public class Actions
         Console.WriteLine($"You heal {chosenPokermon} to {pokermonHealth}hp");
         return pokermonHealth;
     }
+
     public static int ManaRegen(int MP, int maxMP)
     {
         Console.WriteLine("You regenerate mana");
@@ -54,7 +70,17 @@ public class Actions
         }
         return MP;
     }
-    public static int[] EnemyMove(int enemyHealth, int enemyAction, int enemyDamage, int enemyBaseDamage, string enemyPokermon, string chosenPokermon, int pokermonHealth, int enemyMaxHealth)
+
+    public static int[] EnemyMove(
+        int enemyHealth,
+        int enemyAction,
+        int enemyDamage,
+        int enemyBaseDamage,
+        string enemyPokermon,
+        string chosenPokermon,
+        int pokermonHealth,
+        int enemyMaxHealth
+    )
     {
         if (enemyHealth >= 0)
         {
@@ -84,11 +110,13 @@ public class Actions
                 {
                     enemyDamage = Random.Shared.Next(5, 10);
                     enemyDamage += enemyBaseDamage;
-                    Console.WriteLine($"{enemyPokermon} attacks {chosenPokermon} for {enemyDamage}");
+                    Console.WriteLine(
+                        $"{enemyPokermon} attacks {chosenPokermon} for {enemyDamage}"
+                    );
                     pokermonHealth -= enemyDamage;
                 }
             }
         }
-        return[pokermonHealth, enemyHealth];
+        return [pokermonHealth, enemyHealth];
     }
 }
