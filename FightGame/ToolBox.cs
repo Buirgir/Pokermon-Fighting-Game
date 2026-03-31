@@ -235,4 +235,15 @@ public class ToolBox
         int.TryParse(keyInfo.KeyChar.ToString(), out int i);
         return i;
     }
+
+    public static void TypeWriter(string Input)
+    {
+        for (int i = 0; i < Input.Length; i++)
+        {
+            string character = Input.Substring(i, 1);
+            Console.Write(character);
+            Thread.Sleep(35);
+        }
+        Console.WriteLine();
+    }
 }

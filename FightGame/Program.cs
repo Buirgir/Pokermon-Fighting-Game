@@ -24,14 +24,14 @@ int enemyAction = 0;
 int defeatedPokermonCount = 0;
 
 // Introduktion
-Console.WriteLine(
+ToolBox.TypeWriter(
     @"
 Welcome to Pokermon!
 This is a very origional fighting game
 Whats your name?"
 );
 Console.ReadLine();
-Console.WriteLine(
+ToolBox.TypeWriter(
     @"
 Enter the number corresponding to the action you wish to take
 Pick your starter pokermon
@@ -46,13 +46,13 @@ pokermonInt--;
 Thread.Sleep(100);
 
 //Loading
-Console.WriteLine("Do you wish to 1.Load a save 2.Start a new save");
+ToolBox.TypeWriter("Do you wish to 1.Load a save 2.Start a new save");
 int loadSave = ToolBox.ReadKey(2);
 if (loadSave == 1)
 {
     if (File.Exists(@"save.txt") == false)
     {
-        Console.WriteLine("There is nothing to load");
+        ToolBox.TypeWriter("There is nothing to load");
     }
     else
     {
@@ -72,7 +72,7 @@ if (loadSave == 1)
         if (intList.Count != 9)
         {
             //Implements a system to check if the save has been tampered with in a fatal way, and if they have it deletes them so they dont mess with the game.
-            Console.WriteLine("Failed to load, Wiping save file");
+            ToolBox.TypeWriter("Failed to load, Wiping save file");
             Thread.Sleep(100);
             File.Delete(@"save.txt");
         }
@@ -114,7 +114,7 @@ string counter = ToolBox.WhatIsEffectiveAgainst(enemyType, elements);
 //Loop start and stats display
 
 Thread.Sleep(100);
-Console.WriteLine(
+ToolBox.TypeWriter(
     $@"
 Your enemy is a {enemyPokermon}
 Its type is {enemyType}"
@@ -122,7 +122,7 @@ Its type is {enemyType}"
 Thread.Sleep(100);
 
 //lets you pick a action
-Console.WriteLine("To fight, press the number corresponding to the action you wish to take");
+ToolBox.TypeWriter("To fight, press the number corresponding to the action you wish to take");
 Thread.Sleep(100);
 while (pokermonHealth >= 0)
 {
@@ -153,7 +153,7 @@ while (pokermonHealth >= 0)
         {
             if (MP < 15)
             {
-                Console.WriteLine(
+                ToolBox.TypeWriter(
                     "You could not afford to power attack and instead regenerate mana"
                 );
                 MP += 20;
@@ -188,8 +188,8 @@ while (pokermonHealth >= 0)
         }
         else if (action == 5)
         {
-            Console.WriteLine($"{counter} is effective against {enemyPokermon}");
-            Console.WriteLine("Press enter to continue");
+            ToolBox.TypeWriter($"{counter} is effective against {enemyPokermon}");
+            ToolBox.TypeWriter("Press enter to continue");
             Console.ReadLine();
         }
     }
@@ -214,8 +214,8 @@ while (pokermonHealth >= 0)
     //Changes behaviour based on current hp
     if (pokermonHealth <= 0)
     {
-        Console.WriteLine($"You lost after defeating {defeatedPokermonCount} pokermons");
-        Console.WriteLine(
+        ToolBox.TypeWriter($"You lost after defeating {defeatedPokermonCount} pokermons");
+        ToolBox.TypeWriter(
             @"
      _       __           _   
     | |     / _|         | |  
@@ -228,7 +228,7 @@ while (pokermonHealth >= 0)
         if (File.Exists(@"save.txt"))
         {
             File.Delete(@"save.txt");
-            Console.WriteLine("As a punnishment your save is now gone");
+            ToolBox.TypeWriter("As a punnishment your save is now gone");
         }
         Console.ReadLine();
         System.Environment.Exit(0);
@@ -236,8 +236,8 @@ while (pokermonHealth >= 0)
     //Cheks if the enemy is dead
     if (enemyHealth <= 0)
     {
-        Console.WriteLine("");
-        Console.WriteLine($"You defeated {enemyPokermon}!");
+        ToolBox.TypeWriter("");
+        ToolBox.TypeWriter($"You defeated {enemyPokermon}!");
         //Enemy Re-Randomizer
         enemyPokermonAndElement = ToolBox.EnemyPokermonPickerAndElement();
         enemyPokermon = enemyPokermonAndElement[0];
@@ -245,9 +245,14 @@ while (pokermonHealth >= 0)
         Thread.Sleep(2000);
         //Choose upgrade
         Thread.Sleep(500);
-        Console.WriteLine("Which upgrade do you wish to pick?");
-        Console.WriteLine("1.Max HP +20 - 40 2.Max damage + 2-4 3.Max MP + 20-40");
-        Console.WriteLine("(Yourstatswill be regenerated at the start of the next fight)");
+        ToolBox.TypeWriter("Which upgrade do you wish to pick?");
+        ToolBox.TypeWriter(
+            @"
+1.Max HP +20 - 40 
+2.Max damage + 2-4 
+3.Max MP + 20-40"
+        );
+        ToolBox.TypeWriter("(Yourstatswill be regenerated at the start of the next fight)");
         int upgradeChoice = ToolBox.ReadKey(3);
         Thread.Sleep(300);
         //explained at function
@@ -270,7 +275,7 @@ while (pokermonHealth >= 0)
         pokermonHealth = maxPokermonHealth;
         MP = maxMP;
         Thread.Sleep(100);
-        Console.WriteLine("Do you wish to: 1.Save and continue, 2: save and quit");
+        ToolBox.TypeWriter("Do you wish to: 1.Save and continue, 2: save and quit");
         int wannasave = ToolBox.ReadKey(2);
         if (wannasave == 1)
         {
@@ -286,7 +291,7 @@ while (pokermonHealth >= 0)
                 maxMP,
                 defeatedPokermonCount
             );
-            Console.WriteLine("You saved the game");
+            ToolBox.TypeWriter("You saved the game");
         }
         if (wannasave == 2)
         {
@@ -301,12 +306,12 @@ while (pokermonHealth >= 0)
                 maxMP,
                 defeatedPokermonCount
             );
-            Console.WriteLine("You saved the game");
+            ToolBox.TypeWriter("You saved the game");
             System.Environment.Exit(0);
         }
-        Console.WriteLine($"Your next enemy will be a {enemyPokermon}");
-        Console.WriteLine("");
-        Console.WriteLine("LET THE BATTLE BEGIN!");
+        ToolBox.TypeWriter($"Your next enemy will be a {enemyPokermon}");
+        ToolBox.TypeWriter("");
+        ToolBox.TypeWriter("LET THE BATTLE BEGIN!");
         Thread.Sleep(1000);
     }
 }
